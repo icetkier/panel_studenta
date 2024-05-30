@@ -14,7 +14,7 @@ const OcenyScreen = ({ route, navigation }) => {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          console.log("Document data:", docSnap.data()); // Debugging line
+          console.log("Document data:", docSnap.data());
           setGrades(docSnap.data());
         } else {
           console.log("No such document!");
@@ -69,26 +69,29 @@ const OcenyScreen = ({ route, navigation }) => {
                 {sortedSemesters.map((semester, semesterIndex) => (
                   <View key={`${degreeIndex}-${semesterIndex}`} style={styles.semesterContainer}>
                     <Text style={styles.semester}>{semester}</Text>
-                    {Object.keys(grades[degree][semester]).map((course, courseIndex) => (
-                      <View key={courseIndex} style={styles.gradeRow}>
-                        <View style={styles.courseBox}>
-                          <Text style={styles.courseText}>{course}</Text>
-                        </View>
-                        <View style={styles.gradeBox}>
-                          <View style={styles.gradeRowContainer}>
-                            <Text style={styles.gradeLabel}>Ocena:</Text>
-                            <Text style={styles.gradeValue}>{grades[degree][semester][course].Ocena ?? '-'}</Text>
+                    {Object.keys(grades[degree][semester]).map((course, courseIndex) => {
+                      const courseData = grades[degree][semester][course];
+                      return (
+                        <View key={courseIndex} style={styles.gradeRow}>
+                          <View style={styles.courseBox}>
+                            <Text style={styles.courseText}>{course}</Text>
                           </View>
-                          <View style={styles.gradeSeparatorHorizontal} />
-                          {Object.keys(grades[degree][semester][course]).filter(key => key !== 'Ocena').map((subKey, subIndex) => (
-                            <View key={subIndex} style={styles.gradeRowContainer}>
-                              <Text style={styles.gradeLabel}>{subKey}:</Text>
-                              <Text style={styles.gradeValue}>{grades[degree][semester][course][subKey] ?? '-'}</Text>
+                          <View style={styles.gradeBox}>
+                            <View style={styles.gradeRowContainer}>
+                              <Text style={styles.gradeLabel}>Ocena:</Text>
+                              <Text style={styles.gradeValue}>{courseData?.Ocena !== null && courseData?.Ocena !== undefined ? courseData.Ocena : '-'}</Text>
                             </View>
-                          ))}
+                            <View style={styles.gradeSeparatorHorizontal} />
+                            {Object.keys(courseData || {}).filter(key => key !== 'Ocena').map((subKey, subIndex) => (
+                              <View key={subIndex} style={styles.gradeRowContainer}>
+                                <Text style={styles.gradeLabel}>{subKey}:</Text>
+                                <Text style={styles.gradeValue}>{courseData?.[subKey] !== null && courseData?.[subKey] !== undefined ? courseData[subKey] : '-'}</Text>
+                              </View>
+                            ))}
+                          </View>
                         </View>
-                      </View>
-                    ))}
+                      );
+                    })}
                   </View>
                 ))}
                 <View style={styles.separator} />
@@ -156,7 +159,7 @@ const styles = StyleSheet.create({
   subTitle: {
     color: "#000000",
     fontSize: 15,
-    marginBottom: 10,
+    marginBottom: 20,
     marginLeft: 20,
   },
   separator: {
@@ -256,7 +259,7 @@ const styles = StyleSheet.create({
   },
   iconImage: {
     width: 50,
-    height: 50,
+    height: 50 ,
   },
 });
 
