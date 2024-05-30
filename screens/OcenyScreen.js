@@ -1,21 +1,57 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { SafeAreaView, View, ScrollView, Text, StyleSheet, Image, TouchableOpacity, StatusBar } from "react-native";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { db } from '../firebase'; // Import Firestore database
 
-const OcenyScreen = ({ navigation }) => {
+const OcenyScreen = ({ route, navigation }) => {
+  const { user } = route.params;
+  const [grades, setGrades] = useState(null);
+
+  useEffect(() => {
+    const fetchGrades = async () => {
+      try {
+        const docRef = doc(db, "oceny", user.album.toString());
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data()); // Debugging line
+          setGrades(docSnap.data());
+        } else {
+          console.log("No such document!");
+        }
+      } catch (error) {
+        console.error("Error fetching document:", error);
+      }
+    };
+
+    fetchGrades();
+  }, [user.album]);
+
   const handleProfilePress = () => {
-    navigation.navigate('Profile');
+    navigation.navigate('Profile', { user });
   };
 
   const handlePlanPress = () => {
-    navigation.navigate('Plan');
+    navigation.navigate('Plan', { user });
   };
 
   const handleRejestracjaPress = () => {
-    navigation.navigate('Rejestracja');
+    navigation.navigate('Rejestracja', { user });
   };
 
   const handleAktualnosciPress = () => {
-    navigation.navigate('Aktualnosci');
+    navigation.navigate('Aktualnosci', { user });
+  };
+
+  const sortSemesters = (semesters) => {
+    const semesterOrder = { "zimowy": 0, "letni": 1 };
+    return semesters.sort((a, b) => {
+      const [aYear, aSeason] = a.split(" ").reverse();
+      const [bYear, bSeason] = b.split(" ").reverse();
+      const aSemesterOrder = parseInt(aYear) * 2 + semesterOrder[aSeason.toLowerCase()];
+      const bSemesterOrder = parseInt(bYear) * 2 + semesterOrder[bSeason.toLowerCase()];
+      return bSemesterOrder - aSemesterOrder;
+    });
   };
 
   return (
@@ -23,92 +59,45 @@ const OcenyScreen = ({ navigation }) => {
       <StatusBar barStyle="dark-content" />
       <ScrollView contentContainerStyle={styles.scrollView}>
         <Text style={styles.title}>Oceny</Text>
-        <Text style={styles.subTitle}>Geoinformatyka, II stopnia</Text>
+        <Text style={styles.subTitle}>{user.kierunek}</Text>
         <View style={styles.separator} />
-        <Text style={styles.semester}>Semestr letni 2023/2024</Text>
-        <View style={styles.gradeRow}>
-          <View style={styles.courseBox}>
-            <Text style={styles.courseText}>Analiza danych multimedialnych</Text>
-          </View>
-          <View style={styles.gradeBox}>
-            <View style={styles.gradeTextContainer}>
-              <Text style={styles.gradeLabel}>Ocena:</Text>
-              <Text style={styles.gradeLabel}>CWL:</Text>
-            </View>
-            <View style={styles.gradeSeparator} />
-            <View style={styles.gradeValueContainer}>
-              <Text style={styles.gradeValue}>4,5</Text>
-              <Text style={styles.gradeValue}>4,5</Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.gradeRow}>
-          <View style={styles.courseBox}>
-            <Text style={styles.courseText}>Wprowadzenie do języka Python</Text>
-          </View>
-          <View style={styles.gradeBox}>
-            <View style={styles.gradeTextContainer}>
-              <Text style={styles.gradeLabel}>Ocena:</Text>
-              <Text style={styles.gradeLabel}>CWP:</Text>
-            </View>
-            <View style={styles.gradeSeparator} />
-            <View style={styles.gradeValueContainer}>
-              <Text style={styles.gradeValue}>4</Text>
-              <Text style={styles.gradeValue}>4</Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.gradeRow}>
-          <View style={styles.courseBox}>
-            <Text style={styles.courseText}>Podstawy fizyki</Text>
-          </View>
-          <View style={styles.gradeBox}>
-            <View style={styles.gradeTextContainer}>
-              <Text style={styles.gradeLabel}>Ocena:</Text>
-              <Text style={styles.gradeLabel}>EGZ:</Text>
-              <Text style={styles.gradeLabel}>CWA:</Text>
-            </View>
-            <View style={styles.gradeSeparator} />
-            <View style={styles.gradeValueContainer}>
-              <Text style={styles.gradeValue}>3</Text>
-              <Text style={styles.gradeValue}>3</Text>
-              <Text style={styles.gradeValue}>3,5</Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.gradeRow}>
-          <View style={styles.courseBox}>
-            <Text style={styles.courseText}>Podstawy grafiki komputerowej</Text>
-          </View>
-          <View style={styles.gradeBox}>
-            <View style={styles.gradeTextContainer}>
-              <Text style={styles.gradeLabel}>Ocena:</Text>
-              <Text style={styles.gradeLabel}>CWP:</Text>
-            </View>
-            <View style={styles.gradeSeparator} />
-            <View style={styles.gradeValueContainer}>
-              <Text style={styles.gradeValue}>5</Text>
-              <Text style={styles.gradeValue}>5</Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.gradeRow}>
-          <View style={styles.courseBox}>
-            <Text style={styles.courseText}>Zaawansowane techniki internetowe</Text>
-          </View>
-          <View style={styles.gradeBox}>
-            <View style={styles.gradeTextContainer}>
-              <Text style={styles.gradeLabel}>Ocena:</Text>
-              <Text style={styles.gradeLabel}>CWP:</Text>
-            </View>
-            <View style={styles.gradeSeparator} />
-            <View style={styles.gradeValueContainer}>
-              <Text style={styles.gradeValue}>4,5</Text>
-              <Text style={styles.gradeValue}>4,5</Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.separator} />
+        {grades ? (
+          Object.keys(grades).map((degree, degreeIndex) => {
+            const sortedSemesters = sortSemesters(Object.keys(grades[degree]));
+            return (
+              <View key={degreeIndex} style={styles.degreeContainer}>
+                {sortedSemesters.map((semester, semesterIndex) => (
+                  <View key={`${degreeIndex}-${semesterIndex}`} style={styles.semesterContainer}>
+                    <Text style={styles.semester}>{semester}</Text>
+                    {Object.keys(grades[degree][semester]).map((course, courseIndex) => (
+                      <View key={courseIndex} style={styles.gradeRow}>
+                        <View style={styles.courseBox}>
+                          <Text style={styles.courseText}>{course}</Text>
+                        </View>
+                        <View style={styles.gradeBox}>
+                          <View style={styles.gradeRowContainer}>
+                            <Text style={styles.gradeLabel}>Ocena:</Text>
+                            <Text style={styles.gradeValue}>{grades[degree][semester][course].Ocena ?? '-'}</Text>
+                          </View>
+                          <View style={styles.gradeSeparatorHorizontal} />
+                          {Object.keys(grades[degree][semester][course]).filter(key => key !== 'Ocena').map((subKey, subIndex) => (
+                            <View key={subIndex} style={styles.gradeRowContainer}>
+                              <Text style={styles.gradeLabel}>{subKey}:</Text>
+                              <Text style={styles.gradeValue}>{grades[degree][semester][course][subKey] ?? '-'}</Text>
+                            </View>
+                          ))}
+                        </View>
+                      </View>
+                    ))}
+                  </View>
+                ))}
+                <View style={styles.separator} />
+              </View>
+            );
+          })
+        ) : (
+          <Text style={styles.noGradesText}>Brak ocen do wyświetlenia</Text>
+        )}
       </ScrollView>
       <View style={styles.bottomContainer}>
         <View style={styles.iconContainer}>
@@ -156,82 +145,98 @@ const styles = StyleSheet.create({
   scrollView: {
     paddingTop: 30,
     paddingBottom: 20,
+    paddingHorizontal: 14,
   },
   title: {
-    color: "#464646",
     fontSize: 24,
-    marginBottom: 37,
-    marginLeft: 21,
+    fontWeight: 'bold',
+    marginLeft: 20,
+    marginBottom: 20, // Increased margin between title and subTitle
   },
   subTitle: {
     color: "#000000",
     fontSize: 15,
-    marginBottom: 26,
-    marginLeft: 21,
+    marginBottom: 10,
+    marginLeft: 20,
   },
   separator: {
     height: 1,
     backgroundColor: "#000000",
-    marginBottom: 30,
-    marginHorizontal: 14,
+    marginBottom: 10,
   },
   semester: {
     color: "#000000",
     fontSize: 12,
-    marginBottom: 19,
-    marginLeft: 15,
+    marginBottom: 10,
+    marginLeft: 7,
+  },
+  semesterContainer: {
+    marginBottom: 20, // Odstęp między semestrami
+  },
+  degreeContainer: {
+    marginBottom: 20, // Odstęp między przedmiotami w semestrze
   },
   gradeRow: {
     flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 28,
-    marginHorizontal: 14,
+    alignItems: "stretch",
+    marginBottom: 10,
+    marginHorizontal: 15, // Odstęp po obu stronach
   },
   courseBox: {
-    width: 247,
+    flex: 1,
     alignItems: "center",
+    justifyContent: "center",
     borderColor: "#60B7A5",
     borderRadius: 6,
     borderWidth: 4,
-    paddingVertical: 32,
-    marginRight: 15,
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    marginRight: 15, // Odstęp między nazwą przedmiotu a ocenami
   },
   courseText: {
+    textAlign: "center",
     color: "#464646",
     fontSize: 14,
   },
   gradeBox: {
-    width: 113,
-    flexDirection: "row",
+    width: 140,
+    flexDirection: "column",
     justifyContent: "space-between",
-    alignItems: "center",
     backgroundColor: "#EEEEEE",
     borderColor: "#4B8377",
     borderRadius: 6,
     borderWidth: 3,
-    paddingVertical: 17,
-    paddingHorizontal: 13,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    alignItems: "center",
   },
-  gradeTextContainer: {
-    width: 46,
+  gradeRowContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "100%",
+    marginBottom: 5,
   },
   gradeLabel: {
     color: "#464646",
     fontSize: 14,
-    marginBottom: 11,
-  },
-  gradeSeparator: {
-    width: 1,
-    backgroundColor: "#000000",
-    height: 41,
-  },
-  gradeValueContainer: {
-    width: 19,
+    marginRight: 5,
   },
   gradeValue: {
     color: "#464646",
     fontSize: 14,
-    marginBottom: 10,
+  },
+  gradeSeparatorHorizontal: {
+    height: 1,
+    backgroundColor: "#000000",
+    marginVertical: 5,
+    alignSelf: "stretch",
+  },
+  noGradesText: {
+    color: "#464646",
+    fontSize: 16,
+    textAlign: "center",
+    marginVertical: 20,
   },
   bottomContainer: {
     justifyContent: "flex-end",
