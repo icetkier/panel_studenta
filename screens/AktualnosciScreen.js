@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
   bottomContainer: {
     justifyContent: "flex-end",
     alignItems: "center",
-    paddingBottom: 10,
+    paddingBottom: 0,
   },
   iconContainer: {
     flexDirection: "row",
@@ -203,11 +203,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 10,
+    paddingHorizontal: 3,  // Zmniejszenie odstępu między ikonami
   },
   iconImage: {
-    width: 50,
-    height: 50,
+    height: 85,  // Zwiększona wysokość
+    width: 85,   // Zwiększona szerokość
+    resizeMode: 'contain',
   },
 });
 

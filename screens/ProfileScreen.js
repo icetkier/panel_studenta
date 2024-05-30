@@ -303,17 +303,7 @@ const styles = StyleSheet.create({
   bottomContainer: {
     justifyContent: "flex-end",
     alignItems: "center",
-    paddingBottom: 10, // Utrzymanie odpowiedniego odstępu od dołu ekranu
-  },
-  logoutButton: {
-    alignItems: "center",
-    justifyContent: "center",
-    marginVertical: 10, // Przesunięcie przycisku w dół
-  },
-  logoutText: {
-    color: "#52AF60",
-    fontSize: 20,
-    textAlign: 'center', // Wyśrodkowanie przycisku
+    paddingBottom: 0,
   },
   iconContainer: {
     flexDirection: "row",
@@ -324,11 +314,22 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 10, // Więcej wolnego miejsca nad ikonkami
+    paddingHorizontal: 3,
   },
   iconImage: {
-    width: 50,
-    height: 50,
+    height: 85,
+    width: 85,
+    resizeMode: 'contain',
+  },
+  logoutButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 10, // Przesunięcie przycisku w dół
+  },
+  logoutText: {
+    color: "#52AF60",
+    fontSize: 20,
+    textAlign: 'center', // Wyśrodkowanie przycisku
   },
   modalContainer: {
     flex: 1,

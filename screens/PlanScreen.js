@@ -1,21 +1,26 @@
 import React from "react";
 import { SafeAreaView, View, ScrollView, Text, StyleSheet, Image, TouchableOpacity, StatusBar } from "react-native";
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-const PlanScreen = ({ navigation }) => {
+const PlanScreen = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const { user } = route.params;
+
   const handleProfilePress = () => {
-    navigation.navigate('Profile');
+    navigation.navigate('Profile', { user });
   };
 
   const handleOcenyPress = () => {
-    navigation.navigate('Oceny');
+    navigation.navigate('Oceny', { user });
   };
 
   const handleRejestracjaPress = () => {
-    navigation.navigate('Rejestracja');
+    navigation.navigate('Rejestracja', { user });
   };
 
   const handleAktualnosciPress = () => {
-    navigation.navigate('Aktualnosci');
+    navigation.navigate('Aktualnosci', { user });
   };
 
   return (
@@ -80,7 +85,7 @@ const styles = StyleSheet.create({
   bottomContainer: {
     justifyContent: "flex-end",
     alignItems: "center",
-    paddingBottom: 10,
+    paddingBottom: 0,
   },
   iconContainer: {
     flexDirection: "row",
@@ -91,11 +96,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 10,
+    paddingHorizontal: 3,
   },
   iconImage: {
-    width: 50,
-    height: 50,
+    height: 85,
+    width: 85,
+    resizeMode: 'contain',
   },
 });
 
