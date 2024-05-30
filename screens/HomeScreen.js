@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SafeAreaView, View, ScrollView, ImageBackground, StyleSheet, TouchableOpacity, Image, Text, Modal } from "react-native";
+import { SafeAreaView, View, ScrollView, ImageBackground, StyleSheet, TouchableOpacity, Image, Text, Modal, StatusBar } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 
 const HomeScreen = () => {
@@ -20,6 +20,7 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle="dark-content" />
       <ScrollView style={styles.scrollView}>
         <ImageBackground
           source={require('../assets/images/background.png')}
