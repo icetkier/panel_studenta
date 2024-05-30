@@ -3,20 +3,22 @@ import { SafeAreaView, View, ScrollView, Image, Text, StyleSheet, TouchableOpaci
 import { getProfilePictureURL } from '../firebase'; // Import funkcji z firebase.js
 
 const ProfileScreen = ({ route, navigation }) => {
-  const { user } = route.params;
+  const user = route.params ? route.params.user : null;
   const [modalVisible, setModalVisible] = useState(false);
   const [profilePicture, setProfilePicture] = useState(null);
 
   useEffect(() => {
     const fetchProfilePicture = async () => {
-      const url = await getProfilePictureURL(user.album);
-      if (url) {
-        setProfilePicture(url);
+      if (user) {
+        const url = await getProfilePictureURL(user.album);
+        if (url) {
+          setProfilePicture(url);
+        }
       }
     };
 
     fetchProfilePicture();
-  }, [user.album]);
+  }, [user]);
 
   const handleLogout = () => {
     setModalVisible(true);
@@ -30,6 +32,21 @@ const ProfileScreen = ({ route, navigation }) => {
   const cancelLogout = () => {
     setModalVisible(false);
   };
+
+  const handleNavigation = (screen) => {
+    navigation.navigate(screen, { user });
+  };
+
+  if (!user) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <StatusBar barStyle="dark-content" />
+        <View style={styles.centered}>
+          <Text style={styles.errorText}>Błąd: Brak danych użytkownika</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -113,30 +130,30 @@ const ProfileScreen = ({ route, navigation }) => {
               style={styles.iconImage}
             />
           </View>
-          <View style={styles.iconBox}>
+          <TouchableOpacity style={styles.iconBox} onPress={() => handleNavigation('Oceny')}>
             <Image
               source={require('../assets/images/Oceny_OFF.png')}
               style={styles.iconImage}
             />
-          </View>
-          <View style={styles.iconBox}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.iconBox} onPress={() => handleNavigation('Plan')}>
             <Image
               source={require('../assets/images/Plan_OFF.png')}
               style={styles.iconImage}
             />
-          </View>
-          <View style={styles.iconBox}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.iconBox} onPress={() => handleNavigation('Rejestracja')}>
             <Image
               source={require('../assets/images/Rejestracja_OFF.png')}
               style={styles.iconImage}
             />
-          </View>
-          <View style={styles.iconBox}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.iconBox} onPress={() => handleNavigation('Aktualnosci')}>
             <Image
               source={require('../assets/images/Aktualnosci_OFF.png')}
               style={styles.iconImage}
             />
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
       <Modal
@@ -286,7 +303,7 @@ const styles = StyleSheet.create({
   bottomContainer: {
     justifyContent: "flex-end",
     alignItems: "center",
-    paddingBottom: 20, // Utrzymanie odpowiedniego odstępu od dołu ekranu
+    paddingBottom: 10, // Utrzymanie odpowiedniego odstępu od dołu ekranu
   },
   logoutButton: {
     alignItems: "center",
