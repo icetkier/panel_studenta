@@ -87,9 +87,9 @@ const ZajeciaScreen = () => {
           <TouchableOpacity style={styles.iconBox} onPress={handleOcenyPress}>
             <Image source={require('../assets/images/Oceny_OFF.png')} style={styles.iconImage} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconBox}>
+          <View style={styles.iconBox}>
             <Image source={require('../assets/images/Plan_ON.png')} style={styles.iconImage} />
-          </TouchableOpacity>
+          </View>
           <TouchableOpacity style={styles.iconBox} onPress={handleRejestracjaPress}>
             <Image source={require('../assets/images/Rejestracja_OFF.png')} style={styles.iconImage} />
           </TouchableOpacity>
