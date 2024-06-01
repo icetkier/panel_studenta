@@ -46,7 +46,6 @@ const LoginScreen = () => {
     }
     if (valid) {
       try {
-        console.log('Attempting to log in with:', email, password);
         const q = query(collection(db, "users"), where("email", "==", email));
         const querySnapshot = await getDocs(q);
 
@@ -56,7 +55,6 @@ const LoginScreen = () => {
         querySnapshot.forEach((doc) => {
           if (doc.exists()) {
             userData = doc.data();
-            console.log('Found user:', userData);
             if (userData.haslo === password) { // Używamy poprawnego klucza "hasło"
               authenticated = true;
             }
@@ -64,14 +62,11 @@ const LoginScreen = () => {
         });
 
         if (authenticated) {
-          console.log('Login successful!');
           navigation.navigate('Profile', { user: userData });
         } else {
-          console.log('Invalid email or password');
           setLoginError('Nieprawidłowy e-mail lub hasło');
         }
       } catch (error) {
-        console.error("Error logging in: ", error);
         setLoginError('Wystąpił błąd podczas logowania');
       }
     }

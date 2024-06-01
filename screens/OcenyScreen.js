@@ -14,10 +14,7 @@ const OcenyScreen = ({ route, navigation }) => {
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          console.log("Document data:", docSnap.data());
           setGrades(docSnap.data());
-        } else {
-          console.log("No such document!");
         }
       } catch (error) {
         console.error("Error fetching document:", error);
