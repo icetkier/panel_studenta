@@ -10,58 +10,35 @@ import RejestracjaScreen from './screens/RejestracjaScreen';
 import AktualnosciScreen from './screens/AktualnosciScreen';
 import PlanScreen from './screens/PlanScreen';
 import ZajeciaScreen from './screens/ZajeciaScreen';
+import Toast from 'react-native-toast-message';
 import './firebase'; // Import Firebase configuration
 
 const Stack = createStackNavigator();
 
+const ToastContainer = React.forwardRef((props, ref) => <Toast ref={ref} {...props} />);
+
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Home"
-        screenOptions={{
-          headerShown: false,
-          ...TransitionPresets.FadeFromBottomAndroid, // Use a fade transition
-        }}
-      >
-        <Stack.Screen 
-          name="Home" 
-          component={HomeScreen} 
-        />
-        <Stack.Screen 
-          name="Login" 
-          component={LoginScreen} 
-        />
-        <Stack.Screen 
-          name="Profile" 
-          component={ProfileScreen} 
-        />
-        <Stack.Screen 
-          name="Oceny" 
-          component={OcenyScreen} 
-          options={{ animationEnabled: false }} // Disable animation
-        />
-        <Stack.Screen 
-          name="Rejestracja" 
-          component={RejestracjaScreen} 
-          options={{ animationEnabled: false }} // Disable animation
-        />
-        <Stack.Screen 
-          name="Aktualnosci" 
-          component={AktualnosciScreen} 
-          options={{ animationEnabled: false }} // Disable animation
-        />
-        <Stack.Screen 
-          name="Plan" 
-          component={PlanScreen} 
-          options={{ animationEnabled: false }} // Disable animation
-        />
-        <Stack.Screen 
-          name="Zajecia" 
-          component={ZajeciaScreen}
-          options={{ animationEnabled: false }} 
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Home"
+          screenOptions={{
+            headerShown: false,
+            ...TransitionPresets.FadeFromBottomAndroid, // Use a fade transition
+          }}
+        >
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Profile" component={ProfileScreen} />
+          <Stack.Screen name="Oceny" component={OcenyScreen} options={{ animationEnabled: false }} />
+          <Stack.Screen name="Rejestracja" component={RejestracjaScreen} options={{ animationEnabled: false }} />
+          <Stack.Screen name="Aktualnosci" component={AktualnosciScreen} options={{ animationEnabled: false }} />
+          <Stack.Screen name="Plan" component={PlanScreen} options={{ animationEnabled: false }} />
+          <Stack.Screen name="Zajecia" component={ZajeciaScreen} options={{ animationEnabled: false }} />
+        </Stack.Navigator>
+      </NavigationContainer>
+      <ToastContainer ref={(ref) => Toast.setRef(ref)} />
+    </>
   );
 }

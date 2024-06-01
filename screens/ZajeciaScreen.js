@@ -1,6 +1,8 @@
 import React from "react";
-import { SafeAreaView, View, ScrollView, Text, StyleSheet, Image, TouchableOpacity, StatusBar } from "react-native";
+import { SafeAreaView, View, ScrollView, Text, StyleSheet, TouchableOpacity, StatusBar, Image } from "react-native";
 import { useNavigation, useRoute } from '@react-navigation/native';
+import * as MailComposer from 'expo-mail-composer';
+import Toast from 'react-native-toast-message';
 import moment from 'moment';
 
 const ZajeciaScreen = () => {
@@ -28,9 +30,39 @@ const ZajeciaScreen = () => {
     return moment(timestamp.toDate ? timestamp.toDate() : timestamp).format('HH:mm');
   };
 
-  const handleSendMessage = () => {
-    // Implementuj logikę wysyłania wiadomości
-    console.log('Wyślij wiadomość do studentów tej grupy');
+  const handleSendEmail = async () => {
+    const recipientEmails = Object.values(clickedClass.details.Osoby).map(student => student.email);
+
+    const isAvailable = await MailComposer.isAvailableAsync();
+    if (isAvailable) {
+      const options = {
+        recipients: recipientEmails,
+        subject: "Wpisz temat",
+        body: "Wpisz treść wiadomości",
+        isHtml: false
+      };
+
+      const result = await MailComposer.composeAsync(options);
+      if (result.status === 'sent') {
+        Toast.show({
+          type: 'success',
+          text1: 'Wiadomość została wysłana',
+          position: 'bottom',
+        });
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: 'Wysłanie wiadomości nie powiodło się',
+          position: 'bottom',
+        });
+      }
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: 'Mail Composer is not available on this device.',
+        position: 'bottom',
+      });
+    }
   };
 
   // Sortowanie osób alfabetycznie po nazwisku
@@ -61,7 +93,7 @@ const ZajeciaScreen = () => {
           <Text style={styles.label}>Liczba osób w grupie</Text>
           <Text style={styles.value}>{clickedClass.details['Liczba osób']}</Text>
         </View>
-        <TouchableOpacity style={styles.button} onPress={handleSendMessage}>
+        <TouchableOpacity style={styles.button} onPress={handleSendEmail}>
           <Text style={styles.buttonText}>Wyślij wiadomość do studentów tej grupy</Text>
         </TouchableOpacity>
         <View style={styles.tableContainer}>
@@ -118,7 +150,7 @@ const styles = StyleSheet.create({
     height: 25,
   },
   scrollView: {
-    paddingTop: 30,
+    paddingTop: 20,
     paddingBottom: 20,
     paddingHorizontal: 20,
   },
