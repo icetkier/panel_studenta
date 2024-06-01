@@ -117,6 +117,10 @@ const PlanScreen = () => {
     }
   };
 
+  const handleClassPress = (item) => {
+    navigation.navigate('Zajecia', { user, clickedClass: item });
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="dark-content" />
@@ -140,29 +144,35 @@ const PlanScreen = () => {
           </TouchableOpacity>
         </View>
         <View style={styles.separator} />
-        {selectedDaySchedule.map((item, index) => (
-          <View key={index} style={[styles.classContainer, { borderColor: getBorderColor(item.type) }]}>
-            <View style={styles.classDetails}>
-              <Text style={styles.classType}>{item.type}, gr {item.details.gr}</Text>
-              <Text style={styles.classSubject}>{item.subject}</Text>
-              <Text style={styles.classTimeLabel}>Godz.</Text>
-              <Text style={styles.classTime}>{moment(item.details.poczatek.toDate ? item.details.poczatek.toDate() : item.details.poczatek).format('HH:mm')} - {moment(item.details.koniec.toDate ? item.details.koniec.toDate() : item.details.koniec).format('HH:mm')}</Text>
-            </View>
-            <View style={styles.verticalSeparator} />
-            <View style={styles.classLocation}>
-              <View style={styles.locationRow}>
-                <Text style={styles.locationLabel}>Sala</Text>
-                <Text style={styles.locationValue}>{item.details.Sala}</Text>
+        {selectedDaySchedule.length > 0 ? (
+          selectedDaySchedule.map((item, index) => (
+            <TouchableOpacity key={index} onPress={() => handleClassPress(item)}>
+              <View style={[styles.classContainer, { borderColor: getBorderColor(item.type) }]}>
+                <View style={styles.classDetails}>
+                  <Text style={styles.classType}>{item.type}, gr {item.details.gr}</Text>
+                  <Text style={styles.classSubject}>{item.subject}</Text>
+                  <Text style={styles.classTimeLabel}>Godz.</Text>
+                  <Text style={styles.classTime}>{moment(item.details.poczatek.toDate ? item.details.poczatek.toDate() : item.details.poczatek).format('HH:mm')} - {moment(item.details.koniec.toDate ? item.details.koniec.toDate() : item.details.koniec).format('HH:mm')}</Text>
+                </View>
+                <View style={styles.verticalSeparator} />
+                <View style={styles.classLocation}>
+                  <View style={styles.locationRow}>
+                    <Text style={styles.locationLabel}>Sala</Text>
+                    <Text style={styles.locationValue}>{item.details.Sala}</Text>
+                  </View>
+                  <View style={styles.locationRow}>
+                    <Text style={styles.locationLabel}>Budynek</Text>
+                    <Text style={styles.locationValue}>{item.details.Budynek}</Text>
+                  </View>
+                  <Text style={styles.classInstructorLabel}>Prowadzący</Text>
+                  <Text style={styles.classInstructor}>{item.details.Prowadzący}</Text>
+                </View>
               </View>
-              <View style={styles.locationRow}>
-                <Text style={styles.locationLabel}>Budynek</Text>
-                <Text style={styles.locationValue}>{item.details.Budynek}</Text>
-              </View>
-              <Text style={styles.classInstructorLabel}>Prowadzący</Text>
-              <Text style={styles.classInstructor}>{item.details.Prowadzący}</Text>
-            </View>
-          </View>
-        ))}
+            </TouchableOpacity>
+          ))
+        ) : (
+          <Text style={styles.noClassesText}>Brak zajęć do wyświetlenia</Text>
+        )}
       </ScrollView>
       <View style={styles.bottomContainer}>
         <View style={styles.iconContainer}>
@@ -178,12 +188,12 @@ const PlanScreen = () => {
               style={styles.iconImage}
             />
           </TouchableOpacity>
-          <View style={styles.iconBox}>
+          <TouchableOpacity style={styles.iconBox}>
             <Image
               source={require('../assets/images/Plan_ON.png')}
               style={styles.iconImage}
             />
-          </View>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.iconBox} onPress={handleRejestracjaPress}>
             <Image
               source={require('../assets/images/Rejestracja_OFF.png')}
@@ -192,8 +202,8 @@ const PlanScreen = () => {
           </TouchableOpacity>
           <TouchableOpacity style={styles.iconBox} onPress={handleAktualnosciPress}>
             <Image
-              source={require('../assets/images/Aktualnosci_OFF.png')}
-              style={styles.iconImage}
+              source={require('../assets/images/Aktualnosci_OFF.png')}          
+              style={styles.iconImage}            
             />
           </TouchableOpacity>
         </View>
@@ -341,6 +351,12 @@ const styles = StyleSheet.create({
     height: 85,
     width: 85,
     resizeMode: 'contain',
+  },
+  noClassesText: {
+    textAlign: 'center',
+    fontSize: 16,
+    color: '#4B8377',
+    marginTop: 20,
   },
 });
 

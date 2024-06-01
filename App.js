@@ -9,6 +9,7 @@ import OcenyScreen from './screens/OcenyScreen';
 import RejestracjaScreen from './screens/RejestracjaScreen';
 import AktualnosciScreen from './screens/AktualnosciScreen';
 import PlanScreen from './screens/PlanScreen';
+import ZajeciaScreen from './screens/ZajeciaScreen';
 import './firebase'; // Import Firebase configuration
 
 const Stack = createStackNavigator();
@@ -54,6 +55,11 @@ export default function App() {
           name="Plan" 
           component={PlanScreen} 
           options={{ animationEnabled: false }} // Disable animation
+        />
+        <Stack.Screen 
+          name="Zajecia" 
+          component={ZajeciaScreen}
+          options={{ animationEnabled: false }} 
         />
       </Stack.Navigator>
     </NavigationContainer>
