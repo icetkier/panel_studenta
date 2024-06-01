@@ -15,8 +15,6 @@ import './firebase'; // Import Firebase configuration
 
 const Stack = createStackNavigator();
 
-const ToastContainer = React.forwardRef((props, ref) => <Toast ref={ref} {...props} />);
-
 export default function App() {
   return (
     <>
@@ -38,7 +36,7 @@ export default function App() {
           <Stack.Screen name="Zajecia" component={ZajeciaScreen} options={{ animationEnabled: false }} />
         </Stack.Navigator>
       </NavigationContainer>
-      <ToastContainer ref={(ref) => Toast.setRef(ref)} />
+      <Toast />
     </>
   );
 }

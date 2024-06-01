@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     height: 25,
   },
   scrollView: {
-    paddingTop: 20,
+    paddingTop: 30,
     paddingBottom: 20,
     paddingHorizontal: 20,
   },
