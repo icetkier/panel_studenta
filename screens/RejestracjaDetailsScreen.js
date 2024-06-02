@@ -5,7 +5,6 @@ import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
 import Toast from 'react-native-toast-message';
 import moment from 'moment';
 
-// Funkcja do pobierania aktualnych danych rejestracji z Firestore
 const fetchRejestracja = async (rejestracjaId) => {
   try {
     const db = getFirestore();
@@ -29,9 +28,7 @@ const RejestracjaDetailsScreen = () => {
   const { user, rejestracjaId } = route.params;
 
   const [rejestracja, setRejestracja] = useState(null);
-  const [refresh, setRefresh] = useState(false);
 
-  // Funkcja do pobierania danych rejestracji
   const loadRejestracja = async () => {
     const fetchedRejestracja = await fetchRejestracja(rejestracjaId);
     if (fetchedRejestracja) {
@@ -39,21 +36,17 @@ const RejestracjaDetailsScreen = () => {
     }
   };
 
-  // Użyj useFocusEffect, aby pobrać dane przy każdym otwarciu ekranu
   useFocusEffect(
     useCallback(() => {
       loadRejestracja();
+
+      const intervalId = setInterval(() => {
+        loadRejestracja();
+      }, 1000); // Odświeżaj dane co 5 sekund
+
+      return () => clearInterval(intervalId); // Wyczyść interwał po opuszczeniu ekranu
     }, [])
   );
-
-  if (!rejestracja) {
-    return (
-      <SafeAreaView style={styles.safeArea}>
-        <StatusBar barStyle="dark-content" />
-        <Text>Loading...</Text>
-      </SafeAreaView>
-    );
-  }
 
   const handleProfilePress = () => {
     navigation.navigate('Profile', { user });
@@ -96,33 +89,29 @@ const RejestracjaDetailsScreen = () => {
       const db = getFirestore();
       const przedmiotRef = doc(db, "rejestracje", rejestracjaId);
 
-      // Aktualizacja danych w Firestore
       const updatedPrzedmiot = {
         ...przedmiotData,
         'Liczba zajętych miejsc': przedmiotData['Liczba zajętych miejsc'] + 1,
-        'Zapisany': 'Tak',
+        'Osoby': {
+          ...przedmiotData['Osoby'],
+          [user.album.toString().trim()]: {
+            Zapisany: 'Tak'
+          }
+        }
       };
 
       await updateDoc(przedmiotRef, {
         [`Przedmioty.${przedmiot}`]: updatedPrzedmiot,
       });
 
-      // Zaktualizuj lokalny stan
-      setRejestracja((prevRejestracja) => ({
-        ...prevRejestracja,
-        Przedmioty: {
-          ...prevRejestracja.Przedmioty,
-          [przedmiot]: updatedPrzedmiot,
-        },
-      }));
+      // Reload data from Firestore after update
+      loadRejestracja();
 
       Toast.show({
         type: 'success',
         text1: 'Zarejestrowano na przedmiot',
         position: 'bottom',
       });
-
-      setRefresh(!refresh);
     } catch (error) {
       console.error("Błąd podczas rejestracji:", error);
       Toast.show({
@@ -158,33 +147,29 @@ const RejestracjaDetailsScreen = () => {
       const db = getFirestore();
       const przedmiotRef = doc(db, "rejestracje", rejestracjaId);
 
-      // Aktualizacja danych w Firestore
       const updatedPrzedmiot = {
         ...przedmiotData,
         'Liczba zajętych miejsc': przedmiotData['Liczba zajętych miejsc'] - 1,
-        'Zapisany': 'Nie',
+        'Osoby': {
+          ...przedmiotData['Osoby'],
+          [user.album.toString().trim()]: {
+            Zapisany: 'Nie'
+          }
+        }
       };
 
       await updateDoc(przedmiotRef, {
         [`Przedmioty.${przedmiot}`]: updatedPrzedmiot,
       });
 
-      // Zaktualizuj lokalny stan
-      setRejestracja((prevRejestracja) => ({
-        ...prevRejestracja,
-        Przedmioty: {
-          ...prevRejestracja.Przedmioty,
-          [przedmiot]: updatedPrzedmiot,
-        },
-      }));
+      // Reload data from Firestore after update
+      loadRejestracja();
 
       Toast.show({
         type: 'success',
         text1: 'Wypisano z przedmiotu',
         position: 'bottom',
       });
-
-      setRefresh(!refresh);
     } catch (error) {
       console.error("Błąd podczas wypisywania:", error);
       Toast.show({
@@ -195,30 +180,11 @@ const RejestracjaDetailsScreen = () => {
     }
   };
 
-  // Sortowanie przedmiotów alfabetycznie
-  const sortedPrzedmioty = Object.keys(rejestracja.Przedmioty).sort();
-
   const formatDate = (date) => {
     return moment(date.toDate ? date.toDate() : date).format('HH:mm, DD MMMM YYYY');
   };
 
-  const renderStatusIcon = (przedmiotData) => {
-    if (przedmiotData['Zapisany'] === 'Tak') {
-      return (
-        <TouchableOpacity onPress={() => handleUnregister(przedmiotData.name)}>
-          <Image source={require('../assets/images/CartMinus.png')} style={styles.statusIcon} />
-        </TouchableOpacity>
-      );
-    } else if (przedmiotData['Liczba zajętych miejsc'] >= przedmiotData['Liczba miejsc']) {
-      return <Image source={require('../assets/images/CartDeactivated.png')} style={styles.statusIcon} />;
-    } else {
-      return (
-        <TouchableOpacity onPress={() => handleRegister(przedmiotData.name)}>
-          <Image source={require('../assets/images/CartPlus.png')} style={styles.statusIcon} />
-        </TouchableOpacity>
-      );
-    }
-  };
+  const sortedPrzedmioty = Object.keys(rejestracja?.Przedmioty || {}).sort();
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -229,9 +195,9 @@ const RejestracjaDetailsScreen = () => {
         </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={styles.scrollView}>
-        <Text style={styles.title}>{rejestracja.Nazwa}</Text>
+        <Text style={styles.title}>{rejestracja?.Nazwa}</Text>
         <Text style={styles.timePeriod}>
-          {`${formatDate(rejestracja.poczatek)} - ${formatDate(rejestracja.koniec)}`}
+          {rejestracja ? `${formatDate(rejestracja.poczatek)} - ${formatDate(rejestracja.koniec)}` : ""}
         </Text>
         <View style={styles.tableContainer}>
           <View style={[styles.tableRow, styles.tableHeaderRow]}>
@@ -241,6 +207,8 @@ const RejestracjaDetailsScreen = () => {
           </View>
           {sortedPrzedmioty.map((przedmiot, index) => {
             const przedmiotData = { ...rejestracja.Przedmioty[przedmiot], name: przedmiot };
+            const userStatus = przedmiotData.Osoby ? przedmiotData.Osoby[user.album.toString().trim()]?.Zapisany : null;
+
             return (
               <View key={index} style={styles.tableRow}>
                 <Text style={styles.tableCellPrzedmiot}>{przedmiot}</Text>
@@ -256,7 +224,17 @@ const RejestracjaDetailsScreen = () => {
                   <Text style={styles.tableCellText}>{`${przedmiotData['Liczba zajętych miejsc']}/${przedmiotData['Liczba miejsc']}`}</Text>
                 </View>
                 <View style={styles.tableCellStatus}>
-                  {renderStatusIcon(przedmiotData)}
+                  {userStatus === 'Tak' ? (
+                    <TouchableOpacity onPress={() => handleUnregister(przedmiot)}>
+                      <Image source={require('../assets/images/CartMinus.png')} style={styles.statusIcon} />
+                    </TouchableOpacity>
+                  ) : przedmiotData['Liczba zajętych miejsc'] >= przedmiotData['Liczba miejsc'] ? (
+                    <Image source={require('../assets/images/CartDeactivated.png')} style={styles.statusIcon} />
+                  ) : (
+                    <TouchableOpacity onPress={() => handleRegister(przedmiot)}>
+                      <Image source={require('../assets/images/CartPlus.png')} style={styles.statusIcon} />
+                    </TouchableOpacity>
+                  )}
                 </View>
               </View>
             );

@@ -95,8 +95,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 47,
   },
   logo: {
-    width: 245, // Powiększenie logo
-    height: 245, // Powiększenie logo
+    width: 290, // Powiększenie logo
+    height: 290, // Powiększenie logo
     resizeMode: 'contain',
   },
   loginButton: {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, View, ScrollView, Text, StyleSheet, Image, TouchableOpacity, StatusBar } from "react-native";
+import { SafeAreaView, View, ScrollView, Text, StyleSheet, TouchableOpacity, StatusBar, Image } from "react-native";
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { getFirestore, collection, getDocs, query, where } from "firebase/firestore";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
 import moment from 'moment';
 import 'moment/locale/pl';
 
@@ -12,12 +12,23 @@ const RejestracjaScreen = () => {
   const [rejestracje, setRejestracje] = useState([]);
 
   useEffect(() => {
+    console.log("Fetching rejestracje for user:", user);
+
     const fetchRejestracje = async () => {
       try {
         const db = getFirestore();
-        const q = query(collection(db, "rejestracje"), where("album", "==", user.album));
-        const querySnapshot = await getDocs(q);
-        const rejestracjeData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const querySnapshot = await getDocs(collection(db, "rejestracje"));
+        const rejestracjeData = querySnapshot.docs
+          .map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+          .filter((rejestracja) =>
+            Object.keys(rejestracja.Przedmioty).some((przedmiot) =>
+              rejestracja.Przedmioty[przedmiot].Osoby.hasOwnProperty(user.album.toString().trim())
+            )
+          );
+
         setRejestracje(rejestracjeData);
       } catch (error) {
         console.error("Error fetching rejestracje:", error);
