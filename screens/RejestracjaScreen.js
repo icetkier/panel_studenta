@@ -12,7 +12,6 @@ const RejestracjaScreen = () => {
   const [rejestracje, setRejestracje] = useState([]);
 
   useEffect(() => {
-    console.log("Fetching rejestracje for user:", user);
 
     const fetchRejestracje = async () => {
       try {

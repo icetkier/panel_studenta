@@ -148,11 +148,11 @@ const styles = StyleSheet.create({
   },
   newsTitleBox: {
     borderColor: "#000000",
-    borderRadius: 2,
+    borderRadius: 10,
     borderWidth: 1,
     paddingVertical: 12,
     paddingHorizontal: 18,
-    marginBottom: 17,
+    backgroundColor: "#e8f5e9",
   },
   newsTitleText: {
     color: "#204C4F",
@@ -161,33 +161,35 @@ const styles = StyleSheet.create({
   },
   newsContentBox: {
     borderColor: "#000000",
-    borderRadius: 2,
+    borderRadius: 10,
     borderWidth: 1,
-    paddingVertical: 21,
+    paddingVertical: 15, // Zmniejszenie odstępu między tytułem a treścią
     paddingHorizontal: 18,
-    marginBottom: 20,
+    backgroundColor: "#ffffff",
+    marginTop: 10, // Zmniejszenie odstępu między tytułem a treścią
   },
   newsContentText: {
     color: "#000000",
-    fontSize: 11,
+    fontSize: 14,
     marginBottom: 10,
   },
   boldText: {
     fontWeight: 'bold',
   },
   bulletText: {
-    fontSize: 11,
+    fontSize: 14,
     color: "#000000",
     marginLeft: 10,
   },
   linkText: {
     color: "#52AF60",
-    fontSize: 11,
+    fontSize: 14,
   },
   separator: {
     height: 1,
     backgroundColor: "#000000",
-    marginVertical: 20,
+    marginTop: 10,
+    marginBottom: 20,
   },
   bottomContainer: {
     justifyContent: "flex-end",
@@ -203,11 +205,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 3,  // Zmniejszenie odstępu między ikonami
+    paddingHorizontal: 3,
   },
   iconImage: {
-    height: 85,  // Zwiększona wysokość
-    width: 85,   // Zwiększona szerokość
+    height: 85,
+    width: 85,
     resizeMode: 'contain',
   },
 });
