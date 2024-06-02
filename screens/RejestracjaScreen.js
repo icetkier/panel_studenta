@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { SafeAreaView, View, ScrollView, Text, StyleSheet, Image, TouchableOpacity, StatusBar } from "react-native";
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { getFirestore, collection, getDocs, query, where } from "firebase/firestore";
 import moment from 'moment';
 import 'moment/locale/pl';
 
@@ -15,7 +15,8 @@ const RejestracjaScreen = () => {
     const fetchRejestracje = async () => {
       try {
         const db = getFirestore();
-        const querySnapshot = await getDocs(collection(db, "rejestracje"));
+        const q = query(collection(db, "rejestracje"), where("album", "==", user.album));
+        const querySnapshot = await getDocs(q);
         const rejestracjeData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setRejestracje(rejestracjeData);
       } catch (error) {
@@ -24,7 +25,7 @@ const RejestracjaScreen = () => {
     };
 
     fetchRejestracje();
-  }, []);
+  }, [user.album]);
 
   const handleProfilePress = () => {
     navigation.navigate('Profile', { user });
@@ -43,7 +44,7 @@ const RejestracjaScreen = () => {
   };
 
   const handleRejestracjaPress = (rejestracja) => {
-    navigation.navigate('RejestracjaDetails', { user, rejestracja });
+    navigation.navigate('RejestracjaDetails', { user, rejestracjaId: rejestracja.id });
   };
 
   const formatDate = (timestamp) => {
@@ -55,16 +56,20 @@ const RejestracjaScreen = () => {
       <StatusBar barStyle="dark-content" />
       <ScrollView contentContainerStyle={styles.scrollView}>
         <Text style={styles.title}>Aktualnie prowadzone rejestracje na przedmioty</Text>
-        {rejestracje.map(rejestracja => (
-          <TouchableOpacity key={rejestracja.id} style={styles.registrationContainer} onPress={() => handleRejestracjaPress(rejestracja)}>
-            <View style={styles.registrationBox}>
-              <Text style={styles.registrationTitle}>{rejestracja.Nazwa}</Text>
-            </View>
-            <View style={styles.registrationDateBox}>
-              <Text style={styles.registrationDate}>{`${formatDate(rejestracja.poczatek)} - ${formatDate(rejestracja.koniec)}`}</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
+        {rejestracje.length > 0 ? (
+          rejestracje.map(rejestracja => (
+            <TouchableOpacity key={rejestracja.id} style={styles.registrationContainer} onPress={() => handleRejestracjaPress(rejestracja)}>
+              <View style={styles.registrationBox}>
+                <Text style={styles.registrationTitle}>{rejestracja.Nazwa}</Text>
+              </View>
+              <View style={styles.registrationDateBox}>
+                <Text style={styles.registrationDate}>{`${formatDate(rejestracja.poczatek)} - ${formatDate(rejestracja.koniec)}`}</Text>
+              </View>
+            </TouchableOpacity>
+          ))
+        ) : (
+          <Text style={styles.noRegistrations}>Brak dostępnych rejestracji</Text>
+        )}
       </ScrollView>
       <View style={styles.bottomContainer}>
         <View style={styles.iconContainer}>
@@ -97,27 +102,27 @@ const styles = StyleSheet.create({
   scrollView: {
     paddingTop: 30,
     paddingBottom: 20,
-    paddingHorizontal: 15, // Zmniejszone marginesy po bokach
+    paddingHorizontal: 15,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginLeft: 5, // Przesunięcie tytułu bardziej w lewo
-    marginBottom: 20, // Dodatkowy margines na dole
+    marginLeft: 5,
+    marginBottom: 20,
   },
   registrationContainer: {
-    marginBottom: 20, // Zmniejszony odstęp między rejestracjami
-    marginHorizontal: 10, // Zmniejszone marginesy po bokach
+    marginBottom: 20,
+    marginHorizontal: 10,
   },
   registrationBox: {
     backgroundColor: "#EEEEEE",
     borderColor: "#60B7A5",
     borderRadius: 6,
     borderWidth: 4,
-    paddingVertical: 30, // Zmniejszone paddingi
+    paddingVertical: 30,
     paddingHorizontal: 30,
-    justifyContent: 'center', // Wyrównanie tekstu do środka pionowo
-    alignItems: 'center', // Wyrównanie tekstu do środka poziomo
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   registrationTitle: {
     color: "#000000",
@@ -130,14 +135,20 @@ const styles = StyleSheet.create({
     borderColor: "#60B7A5",
     borderRadius: 6,
     borderWidth: 4,
-    paddingVertical: 10, // Zmniejszony padding
-    paddingHorizontal: 10, // Zmniejszone marginesy po bokach
-    marginTop: -20, // Aby przylegały do siebie
-    alignItems: 'center', // Wyrównanie tekstu do środka
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    marginTop: -20,
+    alignItems: 'center',
   },
   registrationDate: {
     color: "#000000",
     fontSize: 15,
+  },
+  noRegistrations: {
+    textAlign: 'center',
+    fontSize: 18,
+    color: '#464646',
+    marginTop: 20,
   },
   bottomContainer: {
     justifyContent: "flex-end",
