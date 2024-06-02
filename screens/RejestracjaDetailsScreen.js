@@ -42,9 +42,9 @@ const RejestracjaDetailsScreen = () => {
 
       const intervalId = setInterval(() => {
         loadRejestracja();
-      }, 1000); // Odświeżaj dane co 5 sekund
+      }, 1000); // Odświeżanie danych co 1 sekundę
 
-      return () => clearInterval(intervalId); // Wyczyść interwał po opuszczeniu ekranu
+      return () => clearInterval(intervalId); 
     }, [])
   );
 
@@ -104,7 +104,6 @@ const RejestracjaDetailsScreen = () => {
         [`Przedmioty.${przedmiot}`]: updatedPrzedmiot,
       });
 
-      // Reload data from Firestore after update
       loadRejestracja();
 
       Toast.show({
@@ -162,7 +161,6 @@ const RejestracjaDetailsScreen = () => {
         [`Przedmioty.${przedmiot}`]: updatedPrzedmiot,
       });
 
-      // Reload data from Firestore after update
       loadRejestracja();
 
       Toast.show({
@@ -373,7 +371,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 3,
   },
   iconImage: {
-    height: 85,
+    height: 88,
     width: 85,
     resizeMode: 'contain',
   },

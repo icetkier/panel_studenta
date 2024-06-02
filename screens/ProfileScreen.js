@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { SafeAreaView, View, ScrollView, Image, Text, StyleSheet, TouchableOpacity, Modal, StatusBar } from "react-native";
-import { getProfilePictureURL } from '../firebase'; // Import funkcji z firebase.js
+import { getProfilePictureURL } from '../firebase'; 
 
 const ProfileScreen = ({ route, navigation }) => {
   const user = route.params ? route.params.user : null;
@@ -186,12 +186,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
   },
   scrollView: {
-    paddingTop: 30, // Zwiększony odstęp zawartości od góry strony
-    paddingBottom: 20, // Zmniejszony padding na dole
+    paddingTop: 30, 
+    paddingBottom: 20, 
   },
   profileContainer: {
     flexDirection: "row",
-    marginBottom: 40, // Zwiększony odstęp między zdjęciem a napisem "Dyplomy"
+    marginBottom: 40, 
     marginHorizontal: 28,
   },
   profileImage: {
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   detailRow: {
-    marginBottom: 5, // Zmniejszony odstęp
+    marginBottom: 5, 
   },
   detailText: {
     color: "#464646",
@@ -218,32 +218,32 @@ const styles = StyleSheet.create({
   sectionTitle: {
     color: "#464646",
     fontSize: 20,
-    marginBottom: 10, // Zmniejszono odstęp między napisem "Dyplomy" a dolną kreską
+    marginBottom: 10, 
     marginLeft: 40,
-    marginTop: 0, // Zwiększono odstęp nad napisem "Dyplomy"
+    marginTop: 0, 
   },
   separator: {
     height: 1,
     backgroundColor: "#000000",
-    marginBottom: 10, // Zmniejszony odstęp
+    marginBottom: 10, 
     marginHorizontal: 14,
   },
   diplomaContainer: {
     backgroundColor: "#D9D9D9",
     borderRadius: 17,
-    paddingTop: 20, // Zmniejszony odstęp
-    paddingBottom: 30, // Zmniejszony odstęp
+    paddingTop: 20, 
+    paddingBottom: 30, 
     paddingHorizontal: 20,
-    marginBottom: 20, // Zmniejszony odstęp
+    marginBottom: 20,
     marginHorizontal: 14,
   },
   emptyDiplomaContainer: {
     backgroundColor: "#D9D9D9",
     borderRadius: 17,
-    paddingTop: 20, // Zmniejszony odstęp
-    paddingBottom: 30, // Zmniejszony odstęp
+    paddingTop: 20, 
+    paddingBottom: 30, 
     paddingHorizontal: 20,
-    marginBottom: 20, // Zmniejszony odstęp
+    marginBottom: 20, 
     marginHorizontal: 14,
   },
   diplomaTitle: {
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
   diplomaText: {
     color: "#000000",
     fontSize: 11,
-    marginBottom: 15, // Zmniejszony odstęp
+    marginBottom: 15, 
   },
   resultContainer: {
     flexDirection: "row",
@@ -273,8 +273,8 @@ const styles = StyleSheet.create({
     width: '48%',
   },
   resultBox: {
-    width: 50, // Zmniejszone kwadraciki
-    height: 50, // Zmniejszone kwadraciki
+    width: 50, 
+    height: 50, 
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#204C4F",
@@ -282,8 +282,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   resultBoxGreen: {
-    width: 50, // Zmniejszone kwadraciki
-    height: 50, // Zmniejszone kwadraciki
+    width: 50, 
+    height: 50, 
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#52AF60",
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     color: "#000000",
     fontSize: 12,
     flex: 1,
-    flexWrap: 'wrap', // Zawijanie tekstu do drugiej linijki
+    flexWrap: 'wrap', 
   },
   bottomContainer: {
     justifyContent: "flex-end",
@@ -317,19 +317,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 3,
   },
   iconImage: {
-    height: 85,
+    height: 88,
     width: 85,
     resizeMode: 'contain',
   },
   logoutButton: {
     alignItems: "center",
     justifyContent: "center",
-    marginVertical: 10, // Przesunięcie przycisku w dół
+    marginVertical: 10, 
   },
   logoutText: {
     color: "#52AF60",
     fontSize: 20,
-    textAlign: 'center', // Wyśrodkowanie przycisku
+    textAlign: 'center', 
   },
   modalContainer: {
     flex: 1,
@@ -366,14 +366,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     padding: 10,
-    borderRadius: 10, // Zaokrąglone rogi
-    marginHorizontal: 5, // Margines między przyciskami
+    borderRadius: 10, 
+    marginHorizontal: 5, 
   },
   modalButtonYes: {
-    backgroundColor: "#52AF60", // Zielone tło dla przycisku "Tak"
+    backgroundColor: "#52AF60", 
   },
   modalButtonTextYes: {
-    color: "#FFFFFF", // Biała czcionka dla przycisku "Tak"
+    color: "#FFFFFF", 
     fontSize: 18,
   },
   modalButtonText: {

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { SafeAreaView, View, Image, Text, StyleSheet, TextInput, TouchableOpacity, Platform, KeyboardAvoidingView, ScrollView, Keyboard, StatusBar } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { getFirestore, collection, getDocs, query, where } from "firebase/firestore";
-import { db } from '../firebase'; // Import Firestore database
+import { db } from '../firebase'; 
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -55,7 +55,7 @@ const LoginScreen = () => {
         querySnapshot.forEach((doc) => {
           if (doc.exists()) {
             userData = doc.data();
-            if (userData.haslo === password) { // Używamy poprawnego klucza "hasło"
+            if (userData.haslo === password) { 
               authenticated = true;
             }
           }

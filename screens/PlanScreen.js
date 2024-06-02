@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    marginLeft: 10, // Dodano margines z lewej strony
+    marginLeft: 10, 
   },
   monthLabel: {
     fontSize: 18,
@@ -348,7 +348,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 3,
   },
   iconImage: {
-    height: 85,
+    height: 88,
     width: 85,
     resizeMode: 'contain',
   },

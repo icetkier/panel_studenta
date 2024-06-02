@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   },
   imageBackground: {
     height: 932,
-    paddingTop: 150, // Przesunięcie tła wyżej
+    paddingTop: 150, 
   },
   header: {
     position: "absolute",
@@ -91,12 +91,12 @@ const styles = StyleSheet.create({
   topSection: {
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 60, // Zmniejszenie dolnego marginesu
+    marginBottom: 60, 
     marginHorizontal: 47,
   },
   logo: {
-    width: 290, // Powiększenie logo
-    height: 290, // Powiększenie logo
+    width: 290, 
+    height: 290, 
     resizeMode: 'contain',
   },
   loginButton: {
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#52AF60",
     borderRadius: 14,
     paddingVertical: 21,
-    marginBottom: 160, // Zmniejszenie dolnego marginesu
+    marginBottom: 160, 
     marginHorizontal: 27,
   },
   loginText: {

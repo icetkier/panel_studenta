@@ -163,10 +163,10 @@ const styles = StyleSheet.create({
     borderColor: "#000000",
     borderRadius: 10,
     borderWidth: 1,
-    paddingVertical: 15, // Zmniejszenie odstępu między tytułem a treścią
+    paddingVertical: 15,
     paddingHorizontal: 18,
     backgroundColor: "#ffffff",
-    marginTop: 10, // Zmniejszenie odstępu między tytułem a treścią
+    marginTop: 10, 
   },
   newsContentText: {
     color: "#000000",
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 3,
   },
   iconImage: {
-    height: 85,
+    height: 88,
     width: 85,
     resizeMode: 'contain',
   },

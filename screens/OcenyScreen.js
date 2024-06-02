@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { SafeAreaView, View, ScrollView, Text, StyleSheet, Image, TouchableOpacity, StatusBar } from "react-native";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
-import { db } from '../firebase'; // Import Firestore database
+import { db } from '../firebase';
 
 const OcenyScreen = ({ route, navigation }) => {
   const { user } = route.params;
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginLeft: 20,
-    marginBottom: 20, // Increased margin between title and subTitle
+    marginBottom: 20, 
   },
   subTitle: {
     color: "#000000",
@@ -171,16 +171,16 @@ const styles = StyleSheet.create({
     marginLeft: 7,
   },
   semesterContainer: {
-    marginBottom: 20, // Odstęp między semestrami
+    marginBottom: 20,
   },
   degreeContainer: {
-    marginBottom: 20, // Odstęp między przedmiotami w semestrze
+    marginBottom: 20,
   },
   gradeRow: {
     flexDirection: "row",
     alignItems: "stretch",
     marginBottom: 10,
-    marginHorizontal: 15, // Odstęp po obu stronach
+    marginHorizontal: 15, 
   },
   courseBox: {
     flex: 1,
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     paddingVertical: 20,
     paddingHorizontal: 10,
-    marginRight: 15, // Odstęp między nazwą przedmiotu a ocenami
+    marginRight: 15, 
   },
   courseText: {
     textAlign: "center",
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 3,
   },
   iconImage: {
-    height: 85,
+    height: 88,
     width: 85,
     resizeMode: 'contain',
   },

@@ -12,7 +12,7 @@ import AktualnosciScreen from './screens/AktualnosciScreen';
 import PlanScreen from './screens/PlanScreen';
 import ZajeciaScreen from './screens/ZajeciaScreen';
 import Toast from 'react-native-toast-message';
-import './firebase'; // Import Firebase configuration
+import './firebase'; 
 
 const Stack = createStackNavigator();
 
@@ -24,7 +24,7 @@ export default function App() {
           initialRouteName="Home"
           screenOptions={{
             headerShown: false,
-            ...TransitionPresets.FadeFromBottomAndroid, // Use a fade transition
+            ...TransitionPresets.FadeFromBottomAndroid,
           }}
         >
           <Stack.Screen name="Home" component={HomeScreen} />

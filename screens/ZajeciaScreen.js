@@ -65,7 +65,6 @@ const ZajeciaScreen = () => {
     }
   };
 
-  // Sortowanie osób alfabetycznie po nazwisku
   const sortedOsoby = Object.values(clickedClass.details.Osoby || {}).sort((a, b) =>
     a.Nazwisko.localeCompare(b.Nazwisko)
   );
@@ -157,13 +156,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 5, // Zmniejszony odstęp
+    marginBottom: 5, 
     marginLeft: 10,
   },
   subTitle: {
-    fontSize: 16, // Zmniejszona czcionka
+    fontSize: 16, 
     fontWeight: 'normal',
-    marginBottom: 20, // Zwiększony odstęp
+    marginBottom: 20, 
     marginLeft: 10,
   },
   detailsContainer: {
@@ -183,10 +182,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#52AF60",
     borderRadius: 14,
     paddingVertical: 11,
-    paddingHorizontal: 20, // Zwiększona szerokość przycisku
+    paddingHorizontal: 20, 
     marginBottom: 22,
     alignSelf: 'center',
-    width: 200, // Utrzymanie tekstu w dwóch linijkach
+    width: 200, 
   },
   buttonText: {
     color: "#FEFCFC",
@@ -250,7 +249,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 3,
   },
   iconImage: {
-    height: 85,
+    height: 88,
     width: 85,
     resizeMode: 'contain',
   },
