@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SafeAreaView, View, ScrollView, ImageBackground, StyleSheet, TouchableOpacity, Image, Text, Modal } from "react-native";
+import { SafeAreaView, View, ScrollView, ImageBackground, StyleSheet, TouchableOpacity, Image, Text, Modal, StatusBar } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 
 const HomeScreen = () => {
@@ -20,6 +20,7 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle="dark-content" />
       <ScrollView style={styles.scrollView}>
         <ImageBackground
           source={require('../assets/images/background.png')}
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
   },
   imageBackground: {
     height: 932,
-    paddingTop: 150, // Przesunięcie tła wyżej
+    paddingTop: 150, 
   },
   header: {
     position: "absolute",
@@ -90,12 +91,12 @@ const styles = StyleSheet.create({
   topSection: {
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 60, // Zmniejszenie dolnego marginesu
+    marginBottom: 60, 
     marginHorizontal: 47,
   },
   logo: {
-    width: 245, // Powiększenie logo
-    height: 245, // Powiększenie logo
+    width: 290, 
+    height: 290, 
     resizeMode: 'contain',
   },
   loginButton: {
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#52AF60",
     borderRadius: 14,
     paddingVertical: 21,
-    marginBottom: 160, // Zmniejszenie dolnego marginesu
+    marginBottom: 160, 
     marginHorizontal: 27,
   },
   loginText: {

@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { SafeAreaView, View, Image, Text, StyleSheet, TextInput, TouchableOpacity, Platform, KeyboardAvoidingView, ScrollView, Keyboard } from "react-native";
+import { SafeAreaView, View, Image, Text, StyleSheet, TextInput, TouchableOpacity, Platform, KeyboardAvoidingView, ScrollView, Keyboard, StatusBar } from "react-native";
 import { useNavigation } from '@react-navigation/native';
+import { getFirestore, collection, getDocs, query, where } from "firebase/firestore";
+import { db } from '../firebase'; 
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -10,6 +12,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [loginError, setLoginError] = useState('');
 
   useEffect(() => {
     const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
@@ -27,7 +30,7 @@ const LoginScreen = () => {
     navigation.navigate('Home');
   };
 
-  const handleLoginPress = () => {
+  const handleLoginPress = async () => {
     let valid = true;
     if (!email) {
       setEmailError('Nie wpisano adresu e-mail');
@@ -42,12 +45,36 @@ const LoginScreen = () => {
       setPasswordError('');
     }
     if (valid) {
-      navigation.navigate('Profile');
+      try {
+        const q = query(collection(db, "users"), where("email", "==", email));
+        const querySnapshot = await getDocs(q);
+
+        let authenticated = false;
+        let userData = null;
+
+        querySnapshot.forEach((doc) => {
+          if (doc.exists()) {
+            userData = doc.data();
+            if (userData.haslo === password) { 
+              authenticated = true;
+            }
+          }
+        });
+
+        if (authenticated) {
+          navigation.navigate('Profile', { user: userData });
+        } else {
+          setLoginError('Nieprawidłowy e-mail lub hasło');
+        }
+      } catch (error) {
+        setLoginError('Wystąpił błąd podczas logowania');
+      }
     }
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle="dark-content" />
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingView}
         behavior={Platform.OS === "ios" ? "padding" : null}
@@ -109,6 +136,7 @@ const LoginScreen = () => {
               onChangeText={setPassword}
             />
             {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+            {loginError ? <Text style={styles.errorText}>{loginError}</Text> : null}
             <TouchableOpacity style={styles.loginButton} onPress={handleLoginPress}>
               <Text style={styles.loginButtonText}>
                 Zaloguj się
